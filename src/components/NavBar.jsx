@@ -5,7 +5,7 @@ function NavBar() {
         <header className="bg-[#242424] text-white px-6 py-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-2 text-xl font-bold">
                 <span role="img" aria-label="logo">🎬</span>
-                <Link to="/">영화 검색 사이트</Link>
+                <Link to="/">영화 정보 페이지</Link>
             </div>
 
             <div className="flex-1 mx-6 max-w-md">
