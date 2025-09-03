@@ -1,0 +1,49 @@
+# -------------------
+# Node
+# -------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# -------------------
+# Vite
+# -------------------
+dist/
+.vite/
+
+# -------------------
+# Tailwind / PostCSS / SCSS
+# -------------------
+*.css.map
+
+# -------------------
+# OS / Editor
+# -------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# -------------------
+# dotenv / 환경 변수 파일 (필요 시)
+# -------------------
+.env
+.env.* 
+
+# -------------------
+# Log files
+# -------------------
+*.log
+
+# -------------------
+# TypeScript / TS Config cache
+# -------------------
+*.tsbuildinfo
+
+# -------------------
+# Build artifacts (optional)
+# -------------------
+build/
+coverage/
