@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import MovieDetail from "./pages/MovieDetail";
+import Layout from "./components/Layout.jsx";
+import Home from "./pages/Home.jsx";
+import MovieDetail from "./pages/MovieDetail.jsx";
+import "./style.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
