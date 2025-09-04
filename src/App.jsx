@@ -6,20 +6,25 @@ const App = () => {
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
-        const token = import.meta.env.VITE_TMDB_TOKEN;
+        const fetchMovies = async () => {
+            try {
+                const res = await fetch("https://api.themoviedb.org/3/movie/popular", {
+                    headers: {
+                        accept: "application/json",
+                        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`, // .env 사용
+                    },
+                });
+                const data = await res.json();
 
-        fetch("https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1", {
-            headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                const filteredMovies = data.results.filter((movie) => !movie.adult);
-                setMovies(filteredMovies);
-            })
-            .catch((err) => console.error(err));
+                // ✅ 성인 영화 제외
+                const filtered = data.results.filter((movie) => !movie.adult);
+                setMovies(filtered);
+            } catch (err) {
+                console.error("영화 불러오기 실패:", err);
+            }
+        };
+
+        fetchMovies();
     }, []);
 
     return (
