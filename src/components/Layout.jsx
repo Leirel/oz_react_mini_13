@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar.jsx";
 
-function Layout() {
+export default function Layout({ isDarkMode, toggleDarkMode }) {
     return (
-        <div className="min-h-screen bg-[#242424] text-white">
-            <NavBar />
-            <main className="p-4 bg-[#242424] min-h-screen text-white">
+        <div className={`min-h-screen transition-colors duration-700 ease-in-out
+            ${isDarkMode ? "bg-[#141414] text-white" : "bg-white text-black"}`}>
+            <NavBar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+            <main className="p-4 min-h-screen">
                 <Outlet />
             </main>
         </div>
     );
 }
-
-export default Layout;

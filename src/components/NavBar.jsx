@@ -1,25 +1,54 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import useDebounce from "../hooks/useDebounce";
 
-function NavBar() {
+export default function NavBar({ isDarkMode, toggleDarkMode }) {
+    const [searchTerm, setSearchTerm] = useState("");
+    const debouncedSearch = useDebounce(searchTerm, 500);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (debouncedSearch.trim()) {
+            navigate(`/search?query=${debouncedSearch}`);
+        }
+    }, [debouncedSearch, navigate]);
+
     return (
-        <header className="bg-[#242424] text-white px-6 py-4 flex items-center justify-between shadow-md">
+        <header className={`px-6 py-4 flex items-center justify-between shadow-md
+            transition-colors duration-700 ease-in-out
+            ${isDarkMode ? "bg-[#141414] text-white" : "bg-white text-black"}`}>
             <div className="flex items-center gap-2 text-xl font-bold">
                 <span role="img" aria-label="logo">🎬</span>
-                <Link to="/">영화 정보 페이지</Link>
+                <Link to="/">영화 정보</Link>
             </div>
 
             <div className="flex-1 mx-6 max-w-md">
                 <input
                     type="text"
                     placeholder="영화를 검색하세요"
-                    className="w-full px-4 py-2 rounded-md bg-[#1e1e1e] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`w-full px-4 py-2 rounded-md border
+                        transition-colors duration-700 ease-in-out
+                        ${isDarkMode 
+                            ? "bg-gray-800 text-white border-gray-600 focus:ring-red-600"
+                            : "bg-gray-200 text-black border-gray-400 focus:ring-red-600"}`}
                 />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
+                <button
+                    onClick={toggleDarkMode}
+                    className={`px-3 py-1 border rounded text-sm
+                        transition-colors duration-700 ease-in-out
+                        ${isDarkMode ? "bg-gray-700 text-white" : "bg-gray-300 text-black"}`}
+                >
+                    {isDarkMode ? "Light" : "Dark"}
+                </button>
+
                 <Link
                     to="/login"
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white text-sm"
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white text-sm"
                 >
                     로그인
                 </Link>
@@ -33,5 +62,3 @@ function NavBar() {
         </header>
     );
 }
-
-export default NavBar;
