@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const baseUrl = "https://image.tmdb.org/t/p/w500";
 
@@ -8,25 +8,20 @@ function MovieDetail() {
     const [movie, setMovie] = useState(null);
 
     useEffect(() => {
-        const fetchMovieDetail = async () => {
-            try {
-                const res = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
-                    headers: {
-                        accept: "application/json",
-                        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-                    },
-                });
-                const data = await res.json();
-                setMovie(data);
-            } catch (err) {
-                console.error("상세 데이터 불러오기 실패:", err);
-            }
-        };
+        const token = import.meta.env.VITE_TMDB_TOKEN;
 
-        fetchMovieDetail();
+        fetch(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR`, {
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => setMovie(data))
+            .catch((err) => console.error(err));
     }, [id]);
 
-    if (!movie) return <p className="text-white p-6">불러오는 중...</p>;
+    if (!movie) return <p className="text-center mt-10">로딩 중...</p>;
 
     return (
         <div className="min-h-screen bg-[#242424] text-white p-6">
