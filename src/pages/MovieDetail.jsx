@@ -9,6 +9,7 @@ export default function MovieDetail({ isDarkMode }) {
     const [movie, setMovie] = useState(null);
 
     useEffect(() => {
+<<<<<<< HEAD
         async function fetchMovieDetail() {
             try {
                 const res = await fetch(
@@ -31,6 +32,22 @@ export default function MovieDetail({ isDarkMode }) {
     }, [id]);
 
     if (!movie) return <p className="p-6">불러오는 중...</p>;
+=======
+        const token = import.meta.env.VITE_TMDB_TOKEN;
+
+        fetch(`https://api.themoviedb.org/3/movie/${id}?language=ko-KR`, {
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => setMovie(data))
+            .catch((err) => console.error(err));
+    }, [id]);
+
+    if (!movie) return <p className="text-center mt-10">로딩 중...</p>;
+>>>>>>> ccd48814a291c023a58615c1ac70435e29754ba4
 
     return (
         <div

@@ -10,6 +10,7 @@ const App = ({ isDarkMode }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
+<<<<<<< HEAD
         async function fetchPopularMovies() {
             try {
                 const res = await fetch(API_URL, {
@@ -29,6 +30,22 @@ const App = ({ isDarkMode }) => {
         }
 
         fetchPopularMovies();
+=======
+        const token = import.meta.env.VITE_TMDB_TOKEN;
+
+        fetch("https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1", {
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                const filteredMovies = data.results.filter((movie) => !movie.adult);
+                setMovies(filteredMovies);
+            })
+            .catch((err) => console.error(err));
+>>>>>>> ccd48814a291c023a58615c1ac70435e29754ba4
     }, []);
 
     if (!movies.length) return <p className="p-6">영화를 불러오는 중...</p>;

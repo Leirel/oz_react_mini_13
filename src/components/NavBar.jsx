@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
+<<<<<<< HEAD
 
 export default function NavBar({ isDarkMode, toggleDarkMode }) {
     const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +14,20 @@ export default function NavBar({ isDarkMode, toggleDarkMode }) {
         }
     }, [debouncedSearch, navigate]);
 
+=======
+
+function NavBar() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const debouncedSearch = useDebounce(searchTerm, 500);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (debouncedSearch.trim()) {
+            navigate(`/search?query=${debouncedSearch}`);
+        }
+    }, [debouncedSearch, navigate]);
+
+>>>>>>> ccd48814a291c023a58615c1ac70435e29754ba4
     return (
         <header className={`px-6 py-4 flex items-center justify-between shadow-md
             transition-colors duration-700 ease-in-out
@@ -28,11 +43,15 @@ export default function NavBar({ isDarkMode, toggleDarkMode }) {
                     placeholder="영화를 검색하세요"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+<<<<<<< HEAD
                     className={`w-full px-4 py-2 rounded-md border
                         transition-colors duration-700 ease-in-out
                         ${isDarkMode 
                             ? "bg-gray-800 text-white border-gray-600 focus:ring-red-600"
                             : "bg-gray-200 text-black border-gray-400 focus:ring-red-600"}`}
+=======
+                    className="w-full px-4 py-2 rounded-md bg-[#1e1e1e] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+>>>>>>> ccd48814a291c023a58615c1ac70435e29754ba4
                 />
             </div>
 
