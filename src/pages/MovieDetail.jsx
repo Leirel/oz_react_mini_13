@@ -30,16 +30,19 @@ export default function MovieDetail({ isDarkMode }) {
         fetchMovieDetail();
     }, [id]);
 
-    if (!movie) return <p className="p-6">불러오는 중...</p>;
+    if (!movie) {
+        return (
+            <div className="flex justify-center items-center min-h-[50vh]">
+                <p>⏳ 상세정보 불러오는 중...</p>
+            </div>
+        );
+    }
 
     return (
-        <div
-            className={`min-h-screen p-6 transition-colors duration-700 ease-in-out
-                ${isDarkMode ? "bg-[#141414] text-white" : "bg-white text-black"}`}
-        >
+        <div className="p-6">
             <div
                 className={`max-w-4xl mx-auto shadow-lg rounded-lg overflow-hidden transition-colors duration-700 ease-in-out
-                    ${isDarkMode ? "bg-[#1e1e1e]" : "bg-gray-100"}`}
+                    ${isDarkMode ? "bg-[#1e1e1e] text-white" : "bg-gray-100 text-black"}`}
             >
                 <img
                     src={`${baseUrl}${movie.backdrop_path || movie.poster_path}`}
@@ -63,7 +66,7 @@ export default function MovieDetail({ isDarkMode }) {
                         ))}
                     </div>
                     <p className={isDarkMode ? "text-gray-200" : "text-gray-700"}>
-                        {movie.overview}
+                        {movie.overview || "줄거리 정보가 없습니다."}
                     </p>
                 </div>
             </div>
