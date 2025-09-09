@@ -14,9 +14,11 @@ export default function NavBar({ isDarkMode, toggleDarkMode }) {
     }, [debouncedSearch, navigate]);
 
     return (
-        <header className={`px-6 py-4 flex items-center justify-between shadow-md
+        <header
+            className={`px-6 py-4 flex items-center justify-between shadow-md
             transition-colors duration-700 ease-in-out
-            ${isDarkMode ? "bg-[#141414] text-white" : "bg-white text-black"}`}>
+            ${isDarkMode ? "bg-[#141414] text-white" : "bg-white text-black"}`}
+        >
             <div className="flex items-center gap-2 text-xl font-bold">
                 <span role="img" aria-label="logo">🎬</span>
                 <Link to="/">영화 정보</Link>
