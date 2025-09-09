@@ -1,25 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
-import { useSupabaseAuth } from "../supabase/useSupabaseAuth";
+import { useSupabaseContext } from "../context/SupabaseContext.jsx";
 
 export default function NavBar({ isDarkMode, toggleDarkMode }) {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearch = useDebounce(searchTerm, 500);
     const navigate = useNavigate();
-    const { user, logout } = useSupabaseAuth();
+
+    const { userInfo, logout } = useSupabaseContext();
 
     useEffect(() => {
         if (debouncedSearch.trim()) {
             navigate(`/search?query=${debouncedSearch}`);
         }
     }, [debouncedSearch, navigate]);
-
-    const handleLogout = async () => {
-        await logout();
-        alert("로그아웃 되었습니다.");
-        navigate("/");
-    };
 
     return (
         <header
@@ -56,16 +51,23 @@ export default function NavBar({ isDarkMode, toggleDarkMode }) {
                     {isDarkMode ? "Light" : "Dark"}
                 </button>
 
-                {user ? (
-                    <>
-                        <span>{user.userName}</span>
-                        <button
-                            onClick={handleLogout}
-                            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white text-sm"
-                        >
-                            로그아웃
-                        </button>
-                    </>
+                {userInfo ? (
+                    <div className="relative">
+                        <img
+                            src={userInfo.profileImageUrl || "/default-profile.png"}
+                            alt="profile"
+                            className="w-8 h-8 rounded-full cursor-pointer"
+                        />
+                        <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border rounded shadow-md p-2 text-sm hidden group-hover:block">
+                            <Link to="/mypage" className="block py-1 hover:text-red-600">마이 페이지</Link>
+                            <button
+                                onClick={() => logout()}
+                                className="w-full text-left py-1 hover:text-red-600"
+                            >
+                                로그아웃
+                            </button>
+                        </div>
+                    </div>
                 ) : (
                     <>
                         <Link

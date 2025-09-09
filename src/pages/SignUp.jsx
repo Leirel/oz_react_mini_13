@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import FormInput from "../components/FormInput";
-import { useSupabaseContext } from "../context/SupabaseContext";
-import { useNavigate } from "react-router-dom";
+import { useSupabaseContext } from "../context/SupabaseContext.jsx";
 
 export default function SignUp() {
+    const { signUp } = useSupabaseContext();
+
     const [form, setForm] = useState({
-        name: "",
+        id: "",
         email: "",
         password: "",
         confirmPassword: "",
     });
     const [errors, setErrors] = useState({});
-    const { signUp, setUser } = useSupabaseContext();
-    const navigate = useNavigate();
 
     const validate = () => {
         const newErrors = {};
-        if (!/^[a-zA-Z0-9가-힣]{2,8}$/.test(form.name)) {
-            newErrors.name = "이름은 2~8자의 한글/영문/숫자만 가능합니다.";
+        if (!/^[a-zA-Z0-9]{2,8}$/.test(form.id)) {
+            newErrors.id = "아이디는 2~8자의 영문/숫자만 가능합니다.";
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
             newErrors.email = "올바른 이메일 형식을 입력하세요.";
@@ -37,17 +36,12 @@ export default function SignUp() {
         if (!validate()) return;
 
         try {
-            const res = await signUp({
+            await signUp({
                 email: form.email,
                 password: form.password,
-                userName: form.name,
+                userName: form.id,
             });
-            if (res?.user) {
-                setUser(res.user);
-                navigate("/");
-            } else if (res?.error) {
-                alert(res.error.message);
-            }
+            alert("회원가입 성공!");
         } catch (err) {
             console.error("회원가입 실패:", err);
         }
@@ -58,11 +52,11 @@ export default function SignUp() {
             <h1 className="text-2xl font-bold mb-6">회원가입</h1>
             <form onSubmit={handleSubmit}>
                 <FormInput
-                    label="이름"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder="이름을 입력하세요"
-                    error={errors.name}
+                    label="아이디"
+                    value={form.id}
+                    onChange={(e) => setForm({ ...form, id: e.target.value })}
+                    placeholder="아이디를 입력하세요"
+                    error={errors.id}
                 />
                 <FormInput
                     label="이메일"
