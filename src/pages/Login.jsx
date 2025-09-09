@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import FormInput from "../components/FormInput";
+import { useSupabaseContext } from "../context/SupabaseContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
+    const { login, setUser } = useSupabaseContext();
+    const navigate = useNavigate();
 
     const validate = () => {
         const newErrors = {};
@@ -13,12 +17,21 @@ export default function Login() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
-        localStorage.setItem("user", JSON.stringify({ email: form.email }));
-        window.location.href = "/";
+        try {
+            const res = await login({ email: form.email, password: form.password });
+            if (res?.user) {
+                setUser(res.user);
+                navigate("/");
+            } else if (res?.error) {
+                alert(res.error.message);
+            }
+        } catch (err) {
+            console.error("로그인 실패:", err);
+        }
     };
 
     return (

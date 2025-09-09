@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import FormInput from "../components/FormInput";
+import { useSupabaseContext } from "../context/SupabaseContext";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
     const [form, setForm] = useState({
@@ -9,6 +11,8 @@ export default function SignUp() {
         confirmPassword: "",
     });
     const [errors, setErrors] = useState({});
+    const { signUp, setUser } = useSupabaseContext();
+    const navigate = useNavigate();
 
     const validate = () => {
         const newErrors = {};
@@ -28,11 +32,25 @@ export default function SignUp() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
-        console.log("회원가입 성공", form);
+        try {
+            const res = await signUp({
+                email: form.email,
+                password: form.password,
+                userName: form.name,
+            });
+            if (res?.user) {
+                setUser(res.user);
+                navigate("/");
+            } else if (res?.error) {
+                alert(res.error.message);
+            }
+        } catch (err) {
+            console.error("회원가입 실패:", err);
+        }
     };
 
     return (

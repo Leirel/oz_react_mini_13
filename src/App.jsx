@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MovieCard from "./components/MovieCard.jsx";
 import { useNavigate } from "react-router-dom";
+import { useSupabaseAuth } from "./supabase/useSupabaseAuth";
 
 const API_URL = "https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1";
 const API_TOKEN = import.meta.env.VITE_TMDB_TOKEN;
@@ -8,6 +9,11 @@ const API_TOKEN = import.meta.env.VITE_TMDB_TOKEN;
 const App = ({ isDarkMode }) => {
     const [movies, setMovies] = useState([]);
     const navigate = useNavigate();
+    const { getUserInfo } = useSupabaseAuth();
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
 
     useEffect(() => {
         async function fetchPopularMovies() {

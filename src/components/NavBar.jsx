@@ -1,17 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
+import { useSupabaseAuth } from "../supabase/useSupabaseAuth";
 
 export default function NavBar({ isDarkMode, toggleDarkMode }) {
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearch = useDebounce(searchTerm, 500);
     const navigate = useNavigate();
+    const { user, logout } = useSupabaseAuth();
 
     useEffect(() => {
         if (debouncedSearch.trim()) {
             navigate(`/search?query=${debouncedSearch}`);
         }
     }, [debouncedSearch, navigate]);
+
+    const handleLogout = async () => {
+        await logout();
+        alert("로그아웃 되었습니다.");
+        navigate("/");
+    };
 
     return (
         <header
@@ -48,18 +56,32 @@ export default function NavBar({ isDarkMode, toggleDarkMode }) {
                     {isDarkMode ? "Light" : "Dark"}
                 </button>
 
-                <Link
-                    to="/login"
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white text-sm"
-                >
-                    로그인
-                </Link>
-                <Link
-                    to="/signup"
-                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white text-sm"
-                >
-                    회원가입
-                </Link>
+                {user ? (
+                    <>
+                        <span>{user.userName}</span>
+                        <button
+                            onClick={handleLogout}
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white text-sm"
+                        >
+                            로그아웃
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <Link
+                            to="/login"
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white text-sm"
+                        >
+                            로그인
+                        </Link>
+                        <Link
+                            to="/signup"
+                            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded text-white text-sm"
+                        >
+                            회원가입
+                        </Link>
+                    </>
+                )}
             </div>
         </header>
     );
